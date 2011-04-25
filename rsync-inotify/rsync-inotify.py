@@ -81,7 +81,7 @@ if __name__ == '__main__':
 
     handler = RsyncHandler(sys.argv[1], sys.argv[2], queue)
     notifier = pyinotify.Notifier(wm, handler)
-    wdd = wm.add_watch('./tmp1/', mask, rec=True)
+    wdd = wm.add_watch(sys.argv[1], mask, rec=True)
 
     logging.debug("Start notifier loop")
     notifier.loop()
