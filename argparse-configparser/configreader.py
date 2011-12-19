@@ -29,28 +29,36 @@ def argparse_configread(argv):
         if not c.endswith('.ini') or not os.path.isfile(c):
             print 'Config file should be ends with ".ini"'
             parser.print_help()
-            sys.exit(1)
+            raise Exception
         config_files.append(c)
 
     for d in args.dir:
         if not os.path.isdir(d):
             print 'Config directory (%s) is not found.' % d
             parser.print_help()
-            sys.exit(1)
+            raise Exception
 
         for c in sorted(os.listdir(d)):
-            if c.endswith('.ini'):
-                config_files.append(c)
+            p = os.path.join(d, c)
+            if c.endswith('.ini') and os.path.isfile(p):
+                config_files.append(p)
 
     if len(config_files) == 0:
         parser.print_help()
-        sys.exit(1)
+        raise Exception
 
     config = ConfigParser.ConfigParser()
     config.read(config_files)
+    print config_files
 
     return config
 
 if __name__ == "__main__":
-    print argparse_configread('-c config.ini -d config'.split())
-    argparse_configread('-c config.in -d config'.split())
+    config =  argparse_configread('-c config.ini -d config'.split())
+
+    print config.sections()
+    for sect in config.sections():
+        for d in config.items(sect):
+            print "sect:%s" % sect,
+            print d
+            
