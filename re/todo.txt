@@ -1,0 +1,2 @@
+separate to log group
+log group contain match/ignore pattern file or lines
